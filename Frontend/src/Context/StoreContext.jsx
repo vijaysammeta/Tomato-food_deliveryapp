@@ -10,6 +10,12 @@ const StoreContextprovider=(props)=>{
   const url="http://localhost:4000";
   const [token,setToken]=useState("");
   const [food_list,setFoodList]=useState([])
+  const [searchQuery, setSearchQuery] = useState("");
+
+
+  function setSearchQueryf(i){
+      setSearchQuery(i);
+  }
 
 // add to cart
 
@@ -78,7 +84,7 @@ const StoreContextprovider=(props)=>{
 
 
   const contextvalue={
-    food_list,cartItems,setCartItems,addToCart,removeFromCart,getTotalCartAmount,url,token,setToken
+    food_list,cartItems,setCartItems,addToCart,removeFromCart,getTotalCartAmount,url,token,setToken,setSearchQueryf,searchQuery
 
 
   }

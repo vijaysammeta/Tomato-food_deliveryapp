@@ -171,9 +171,31 @@ const placeOrder = async (req, res) => {
       payment_method_types: ["card"],
       line_items,
       mode: "payment",
-      success_url: `${frontend_url}/verify?success=true&userId=${req.body.userId}&session_id={CHECKOUT_SESSION_ID}`,
+      // success_url: `${frontend_url}/verify?success=true&userId=${req.body.userId}&session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `http://localhost:5174/myorders`,
+
       cancel_url: `${frontend_url}/verify?success=false&userId=${req.body.userId}`,
+
+      
     });
+
+    console.log("payment done....123");
+    const id = req.body.userId;
+    const address = req.body.address; 
+    const items = req.body.items;
+    const amount = req.body.amount; 
+
+    // const user = new userModel.findOne({id});
+    const order = new orderModel({
+      userId:id,
+      address:address,
+      items:items,
+      amount:amount
+    })
+
+
+    await order.save();
+    
 
     res.json({ success: true, session_url: session.url });
 
@@ -207,6 +229,7 @@ const verifyOrder = async (req, res) => {
       address: session.metadata.address || "No Address Provided",
       payment: true,
       status: "Processing",
+      
     });
 
     await newOrder.save();
@@ -266,78 +289,3 @@ export { placeOrder, verifyOrder, userOrders, listOrders, updateStatus };
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- // const line_items=req.body.items.map((item)=>({
-      //   price_data:{
-      //     currency:"inr",
-      //     product_data:{
-      //       name:item.name
-      //     },
-      //     unit_amount:item.price.price*100*80
-      //   },
-      //   quantity:item.quantity
-
-      // }))
-
-      // line_items.push({
-      //   price_data:{
-      //     currency:"inr",
-      //     product_data:{
-      //       name:"Delivery Charges"
-      //     },
-      //     unit_amount:2*100*80
-      //   },
-      //   quantity:1
-      // })
-
-
-
-
-
-
-
-
-// const verifyOrder=async(req,res)=>{
-//    const{orderId,success}=req.body;
-//    try{
-//     if(success=="true"){
-//       await orderModel.findByIdAndUpdate(orderId,{payment:true});
-//       res.json({success:true,message:"Paid"})
-//     }
-//     else{
-//       await orderModel.findByIdAndDelete(orderId);
-//       res.json({success:false,message:"Not Paid"})
-//     }
-
-//    }catch(error){
-//     console.log(error);
-//     res.json({success:false,message:"Error"})
-
-
-//    }
-
-// }

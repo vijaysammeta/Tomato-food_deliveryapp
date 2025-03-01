@@ -12,15 +12,15 @@ const Placeorder = () => {
 
 
   const [data,setData]=useState({
-    firstName:"",
-    lastName:"",
-    email:"",
-    street:"",
-    city:"",
-    state:"",
-    zipcode:"",
-    country:"",
-    phone:""
+    firstName:"vijay",
+    lastName:"kumar",
+    email:"vijay@gmail.com",
+    street:"xxx",
+    city:"xyz",
+    state:"tel",
+    zipcode:"1234",
+    country:"india",
+    phone:"987657890987"
 
   })
 
@@ -35,10 +35,12 @@ const Placeorder = () => {
 
   const checkoutHandler = async () => {
     try {
-      const response = await axios.post("http://localhost:4000/api/order/place", orderData);
+      const response = await axios.post("http://localhost:4000/api/order/place", data);
   
       if (response.data.success) {
         console.log("Redirecting to Stripe...");
+        console.log("my data :",response.data);
+        
         window.location.href = response.data.session_url; // ✅ Redirect to Stripe Payment Page
       } else {
         alert("Order placement failed. Try again!");
@@ -48,58 +50,9 @@ const Placeorder = () => {
       alert("Error processing payment.");
     }
   };
-  
-  
-
-
-
-
-
-
-
-  // useEffect(()=>{
-  //   console.log(data);
-  // },[data])
-
-  // const placeOrder=async(event)=>{
-  //   event.preventDefault();
-  //   let orderItems=[];
-  //   food_list.map((item)=>{
-  //     if(cartItems[item._id]>0){
-  //       let itemInfo=item;
-  //       itemInfo["quantity"]=cartItems[item._id];
-  //       orderItems.push(itemInfo)
-  //     }
-  //   })
-  //   let orderData={
-  //     address:data,
-  //     items:orderItems,
-  //     amount:getTotalCartAmount()+2,
-  //   }
-  //   let res=await axios.post(url+"/api/order/place",orderData,{headers:{token}})
-
-  //   if(Response.data.success){
-  //     const{session_url}=response.data;
-  //     window.location.replace(session_url);
-  //   }
-  //   else{
-  //     alert("Error");
-  //   }
-  // }
-
-
-
-
-
-
-
-
-
-
-
-
 
   const placeOrder = async (event) => {
+    // navigate = useNavigate();
     event.preventDefault();
   
     let orderItems = food_list.filter((item) => cartItems[item._id] > 0)
@@ -121,6 +74,7 @@ const Placeorder = () => {
     try {
         let res = await axios.post(url + "/api/order/place", orderData, {
             headers: { token },
+            body: JSON.stringify({userId:orderData.userId,address:orderData.address,items:orderData.items,amount:orderData.amount})
         });
 
         console.log("API Response:", res.data);  // ✅ Log API response
@@ -129,6 +83,7 @@ const Placeorder = () => {
             const { session_url } = res.data;
             console.log("Redirecting to:", session_url);  // ✅ Log the redirection URL
             window.location.replace(session_url);
+            // navigate('/')
         } else {
             console.error("Order processing failed:", res.data);
             alert("Error processing order. Please try again.");

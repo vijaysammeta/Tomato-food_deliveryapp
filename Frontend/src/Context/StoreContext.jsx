@@ -7,7 +7,7 @@ export const StoreContext=createContext(null)
 const StoreContextprovider=(props)=>{
 
   const[cartItems,setCartItems]=useState({});
-  const url="http://localhost:4000";
+  const url="https://tomato-food-deliveryapp-backend.onrender.com";
   const [token,setToken]=useState("");
   const [food_list,setFoodList]=useState([])
   const [searchQuery, setSearchQuery] = useState("");
